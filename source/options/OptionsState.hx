@@ -13,7 +13,19 @@ class OptionsState extends MusicBeatState
 		'Visuals',
 		'Gameplay'
 		#if TRANSLATIONS_ALLOWED , 'Language' #end
-		,'Mobile Options'
+		,'Mobile Options',
+		'Reset Data'
+	];
+	var optionsDesc:Array<String> = [
+		"Change note colors",
+		"Change keybinds controls",
+		"Switch to the beat states to adjust the delay of the game offset",
+		"Recommended to check first if your PC can't handle something",
+		"Visual Setting are also recommended to check first",
+		"Gameplay can help you play as downscroll, middlescroll, adjust the offset of the rating combo",
+		#if TRANSLATIONS_ALLOWED "Change the game languages", #end
+		"Change / adjust for mobile",
+		"Reset the game data"
 	];
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private static var curSelected:Int = 0;
@@ -43,11 +55,15 @@ class OptionsState extends MusicBeatState
 				openSubState(new mobile.options.MobileOptionsSubState());
 			case 'Language':
 				openSubState(new options.LanguageSubState());
+			case 'Reset Data':
+				openSubState(new options.ResetDataSubState());
 		}
 	}
 
 	var selectorLeft:Alphabet;
 	var selectorRight:Alphabet;
+	private var descBox:FlxSprite;
+	private var descText:FlxText;
 
 	override function create()
 	{
@@ -76,11 +92,19 @@ class OptionsState extends MusicBeatState
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
 
+		var spacing:Float = 70;
+		var totalHeight:Float = options.length * spacing;
+		var screenHeight:Float = FlxG.height - 100;
+		
+		if (totalHeight > screenHeight) {
+			spacing = screenHeight / options.length;
+		}
+
 		for (num => option in options)
 		{
 			var optionText:Alphabet = new Alphabet(0, 0, Language.getPhrase('options_$option', option), true);
 			optionText.screenCenter();
-			optionText.y += (92 * (num - (options.length / 2))) + 45;
+			optionText.y += (spacing * (num - (options.length / 2))) + 45;
 			grpOptions.add(optionText);
 		}
 
@@ -88,6 +112,16 @@ class OptionsState extends MusicBeatState
 		add(selectorLeft);
 		selectorRight = new Alphabet(0, 0, '<', true);
 		add(selectorRight);
+
+		descBox = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
+		descBox.alpha = 0.6;
+		add(descBox);
+
+		descText = new FlxText(50, 600, 1180, "", 32);
+		descText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		descText.scrollFactor.set();
+		descText.borderSize = 2.4;
+		add(descText);
 
 		changeSelection();
 		ClientPrefs.saveSettings();
@@ -159,6 +193,15 @@ class OptionsState extends MusicBeatState
 				selectorRight.y = item.y;
 			}
 		}
+
+		descText.text = optionsDesc[curSelected];
+		descText.screenCenter(Y);
+		descText.y += 270;
+
+		descBox.setPosition(descText.x - 10, descText.y - 10);
+		descBox.setGraphicSize(Std.int(descText.width + 20), Std.int(descText.height + 25));
+		descBox.updateHitbox();
+
 		FlxG.sound.play(Paths.sound('scrollMenu'));
 	}
 

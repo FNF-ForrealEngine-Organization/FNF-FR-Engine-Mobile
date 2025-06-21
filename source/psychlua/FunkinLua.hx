@@ -70,6 +70,7 @@ class FunkinLua {
 		this.scriptName = scriptName.trim();
 		var game:PlayState = PlayState.instance;
 		if(game != null) game.luaArray.push(this);
+		else if (game == null) StateScriptHandler.lua = this; // use for states scripts
 
 		var myFolder:Array<String> = this.scriptName.split('/');
 		#if MODS_ALLOWED

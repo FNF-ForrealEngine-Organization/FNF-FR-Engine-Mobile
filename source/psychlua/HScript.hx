@@ -10,6 +10,7 @@ import psychlua.FunkinLua;
 #end
 
 #if HSCRIPT_ALLOWED
+import crowplexus.hscript.Interp.LocalVar;
 import crowplexus.iris.Iris;
 import crowplexus.iris.IrisConfig;
 import crowplexus.hscript.Expr.Error as IrisError;
@@ -80,6 +81,54 @@ class HScript extends Iris
 		}
 	}
 	#end
+
+	var locals(get, set):Map<String, LocalVar>;
+
+	function get_locals():Map<String, LocalVar>
+	{
+		var result:Map<String, LocalVar> = new Map();
+		@:privateAccess
+		for (key in interp.locals.keys())
+		{
+			result.set(key, {r: interp.locals.get(key).r, const: interp.locals.get(key).const});
+		}
+		return result;
+	}
+
+	function set_locals(local:Map<String, LocalVar>) 
+	{
+		@:privateAccess
+		interp.locals = local;
+		return local;
+	}    
+	
+	public function getAll():Dynamic
+    {
+        var result:Dynamic = {};
+
+        @:privateAccess
+        if (interp != null && interp.locals != null)
+        {
+            for (i in interp.locals.keys()) {
+                var value = interp.locals.get(i).r;
+                if (value != null)
+                    Reflect.setField(result, i, value);
+            }
+        }
+
+        if (interp != null && interp.variables != null)
+        {
+            for (i in interp.variables.keys()) {
+                if (!Reflect.hasField(result, i)) {
+                    var value = interp.variables.get(i);
+                    if (value != null)
+                        Reflect.setField(result, i, value);
+                }
+            }
+        }
+
+        return result;
+    }
 
 	public var origin:String;
 	override public function new(?parent:Dynamic, ?file:String, ?varsToBring:Any = null, ?manualRun:Bool = false)
