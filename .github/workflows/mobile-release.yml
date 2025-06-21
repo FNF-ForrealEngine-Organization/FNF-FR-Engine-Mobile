@@ -6,7 +6,7 @@ permissions:
   discussions: write
 
 env:
-  PROJECT_NAME: PsychEngine
+  PROJECT_NAME: ForrealEngine
   REPO_PATH: FNF-ForrealEngine-Organization/FNF-FR-Engine-Mobile
 
 jobs:
