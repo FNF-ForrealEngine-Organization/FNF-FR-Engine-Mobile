@@ -18,25 +18,25 @@ class MainMenuState extends MusicBeatState
 	public static var psychEngineVersion:String = '1.0.4'; // This is also used for Discord RPC
 	public static var curSelected:Int = 0;
 	public static var curColumn:MainMenuColumn = CENTER;
-	var allowMouse:Bool = true; //Turn this off to block mouse movement in menus
+	public var allowMouse:Bool = true; //Turn this off to block mouse movement in menus
 
-	var menuItems:FlxTypedGroup<FlxSprite>;
-	var leftItem:FlxSprite;
-	var rightItem:FlxSprite;
+	public var menuItems:FlxTypedGroup<FlxSprite>;
+	public var leftItem:FlxSprite;
+	public var rightItem:FlxSprite;
 
 	//Centered/Text options
-	var optionShit:Array<String> = [
+	public var optionShit:Array<String> = [
 		'story_mode',
 		'freeplay',
 		#if MODS_ALLOWED 'mods', #end
 		'credits'
 	];
 
-	var leftOption:String = #if ACHIEVEMENTS_ALLOWED 'achievements' #else null #end;
-	var rightOption:String = 'options';
+	public var leftOption:String = #if ACHIEVEMENTS_ALLOWED 'achievements' #else null #end;
+	public var rightOption:String = 'options';
 
-	var magenta:FlxSprite;
-	var camFollow:FlxObject;
+	public var magenta:FlxSprite;
+	public var camFollow:FlxObject;
 
 	static var showOutdatedWarning:Bool = true;
 	override function create()
@@ -52,6 +52,8 @@ class MainMenuState extends MusicBeatState
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
+
+		setStateScript();
 
 		persistentUpdate = persistentDraw = true;
 
@@ -95,7 +97,7 @@ class MainMenuState extends MusicBeatState
 			rightItem.x -= rightItem.width;
 		}
 
-		var forrealVer:FlxText = new FlxText(12, FlxG.height - 44, 0, "Forreal Engine v" + forrealEngineVersion, 12);
+		var forrealVer:FlxText = new FlxText(12, FlxG.height - 64, 0, "Forreal Engine v" + forrealEngineVersion, 12);
 		forrealVer.scrollFactor.set();
 		forrealVer.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(forrealVer);
@@ -381,5 +383,7 @@ class MainMenuState extends MusicBeatState
 		selectedItem.animation.play('selected');
 		selectedItem.centerOffsets();
 		camFollow.y = selectedItem.getGraphicMidpoint().y;
+
+		StateScriptHandler.callOnScripts("onChangeItem", []);
 	}
 }

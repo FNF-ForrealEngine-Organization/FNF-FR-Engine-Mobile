@@ -66,6 +66,7 @@ class ResetDataSubState extends MusicBeatSubstate
             } else {
                 FlxG.sound.play(Paths.sound('cancelMenu'));
                 close();
+				FlxTween.tween(touchPad, {alpha: 0}, 1);
             }
         }
         if (back) {
