@@ -1,4 +1,4 @@
-<p align="center"><img src="logo.png" alt="Logo Forreal Engine" width="60%"></p>
+<p align="center"><img src="https://github.com/FNF-ForrealEngine-Organization/FNF-FR-Engine/blob/main/logo.png" alt="Logo Forreal Engine" width="60%"></p>
 
 A custom fork version of psych engine, come up with:
 - Scripted State, Sub State (Well Sub State is already there lmao)
