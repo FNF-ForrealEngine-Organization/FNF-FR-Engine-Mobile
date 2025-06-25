@@ -121,12 +121,6 @@ class TitleState extends MusicBeatState
 		#end
 	}
 
-	var logoBl:FlxSprite;
-	var gfDance:FlxSprite;
-	var danceLeft:Bool = false;
-	var titleText:FlxSprite;
-	var swagShader:ColorSwap = null;
-
 	function startIntro()
 	{
 		persistentUpdate = true;
