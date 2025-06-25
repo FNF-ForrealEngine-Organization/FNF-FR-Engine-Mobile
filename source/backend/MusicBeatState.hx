@@ -93,11 +93,7 @@ class MusicBeatState extends FlxState
 				return true;
 			}
 		}
-			#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
-			addTextToDebug('Missing shader $name .frag AND .vert files!', FlxColor.RED);
-			#else
 			FlxG.log.warn('Missing shader $name .frag AND .vert files!');
-			#end
 		#else
 		FlxG.log.warn('This platform doesn\'t support Runtime Shaders!');
 		#end
